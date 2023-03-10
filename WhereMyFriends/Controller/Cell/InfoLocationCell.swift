@@ -6,58 +6,67 @@
 //
 
 import UIKit
+import CoreLocation
 
 final class InfoLocationCell: UITableViewCell {
     
     static let identifier = "InfoLocationCell"
     
-    lazy var mainStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.distribution = .equalCentering
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
+    var selectedUser: User?
     
-    lazy private var avatarImage: UIImageView = {
-        var image = UIImageView()
-        image.contentMode = .scaleAspectFill
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
-    }()
-    
-    lazy private var nameUserLabel: UILabel = {
-        var label = UILabel()
-        label.text = "Имя"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    lazy private var userDistanceLabel: UILabel = {
-        var label = UILabel()
-        label.text = "666 км"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private let avatarImageView = UIImageView(contentMode: .scaleAspectFit)
+    private let nameLabel = UILabel(textAlignment: .center)
+    private let distanceLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(mainStack)
-        mainStack.addArrangedSubview(avatarImage)
-        mainStack.addArrangedSubview(nameUserLabel)
-        mainStack.addArrangedSubview(userDistanceLabel)
-        
+        let views = [avatarImageView, nameLabel, distanceLabel]
+            views.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        addSubview(avatarImageView)
+        addSubview(nameLabel)
+        addSubview(distanceLabel)
+
         NSLayoutConstraint.activate([
+            avatarImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            avatarImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 50),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 50),
             
-            mainStack.centerYAnchor.constraint(equalTo: centerYAnchor),
-//            mainStack.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            mainStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            mainStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-//            mainStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 10)
+            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 10),
+            nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            distanceLabel.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 10),
+            distanceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            distanceLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
         ])
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(with user: User, selectedUser: User?) {
+        nameLabel.text = user.name
+        self.selectedUser = selectedUser
+        
+        if let selectedUser = selectedUser {
+            if selectedUser == user {
+                distanceLabel.text = "0.0 km"
+            } else {
+                let distance = calculateDistance(from: user, to: selectedUser)
+                distanceLabel.text = String(format: "%.2f km", distance)
+            }
+        } else {
+            distanceLabel.text = "Select a user"
+        }
+        
+        avatarImageView.image = UIImage(named: "smile")
+    }
+    
+    private func calculateDistance(from user: User, to selectedUser: User) -> Double {
+        let userLocation = CLLocation(latitude: user.latitude, longitude: user.longitude)
+        let selectedUserLocation = CLLocation(latitude: selectedUser.latitude, longitude: selectedUser.longitude)
+        let distance = userLocation.distance(from: selectedUserLocation) / 1000
+        return distance
     }
 }
