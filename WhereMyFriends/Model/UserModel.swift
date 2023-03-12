@@ -11,6 +11,7 @@ struct User {
     let name: String
     var latitude: Double
     var longitude: Double
+    var profileImage: UIImage
     
     static func == (lhs: User, rhs: User) -> Bool {
         return lhs.name == rhs.name

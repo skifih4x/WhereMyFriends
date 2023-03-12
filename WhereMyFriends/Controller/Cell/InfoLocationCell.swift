@@ -14,8 +14,8 @@ final class InfoLocationCell: UITableViewCell {
     
     var selectedUser: User?
     
-    private let avatarImageView = UIImageView(contentMode: .scaleAspectFit)
-    private let nameLabel = UILabel(textAlignment: .center)
+    private let avatarImageView = UIImageView(contentMode: .scaleToFill)
+    private let nameLabel = UILabel(textAlignment: .left)
     private let distanceLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -25,7 +25,6 @@ final class InfoLocationCell: UITableViewCell {
         addSubview(avatarImageView)
         addSubview(nameLabel)
         addSubview(distanceLabel)
-
         NSLayoutConstraint.activate([
             avatarImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             avatarImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -51,16 +50,17 @@ final class InfoLocationCell: UITableViewCell {
         
         if let selectedUser = selectedUser {
             if selectedUser == user {
-                distanceLabel.text = "0.0 km"
+                distanceLabel.text = "Tекущий пользователь"
+                distanceLabel.adjustsFontSizeToFitWidth = true
             } else {
                 let distance = calculateDistance(from: user, to: selectedUser)
                 distanceLabel.text = String(format: "%.2f km", distance)
             }
         } else {
-            distanceLabel.text = "Select a user"
+            distanceLabel.text = "Выберите пользователя"
         }
         
-        avatarImageView.image = UIImage(named: "smile")
+        avatarImageView.image = user.profileImage
     }
     
     private func calculateDistance(from user: User, to selectedUser: User) -> Double {
