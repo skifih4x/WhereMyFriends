@@ -73,13 +73,13 @@
 		0085224629B773AD006B88F0 /* WhereMyFriends */ = {
 			isa = PBXGroup;
 			children = (
+				0085225E29B7D9E0006B88F0 /* Controller */,
 				0085225D29B7949B006B88F0 /* Service */,
 				0085225C29B79491006B88F0 /* Model */,
-				0085225E29B7D9E0006B88F0 /* Controller */,
 				0085225B29B77CE7006B88F0 /* Resurces */,
+				007FBE3229BAA38C00D2B0C5 /* Extension */,
 				0085226229B7F091006B88F0 /* View */,
 				0085226329B7F09F006B88F0 /* App */,
-				007FBE3229BAA38C00D2B0C5 /* Extension */,
 				0085225529B773AE006B88F0 /* Info.plist */,
 			);
 			path = WhereMyFriends;
