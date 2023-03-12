@@ -104,6 +104,7 @@ final class MainViewController: UIViewController {
     
     
     private func startUpdatingLocations() {
+        updateLocations() // обновляем таблицу сразу после вызова метода
         timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { [weak self] _ in
             self?.updateLocations()
         }
